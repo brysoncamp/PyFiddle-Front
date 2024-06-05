@@ -1,0 +1,5 @@
+.side {
+    height: calc(100vh - 3rem - 1px);
+    width: 16rem;
+    border-right: 1px solid #2e2e2e;
+}
