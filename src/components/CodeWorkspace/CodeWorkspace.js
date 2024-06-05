@@ -2,6 +2,7 @@ import React from 'react';
 
 import CodeEditor from './components/CodeEditor/CodeEditor';
 
+/*
 const CodeWorkspace = {
     return (
         <div>
@@ -9,5 +10,5 @@ const CodeWorkspace = {
         </div>
     )
 }
-
+*/
 export default CodeWorkspace;
