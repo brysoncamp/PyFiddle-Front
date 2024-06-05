@@ -1,27 +1,31 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "166481ab679c9d046c08371b6ce217f1",
+    "revision": "a78451290bde0e328464a55d61b2143e",
     "url": "/index.html"
   },
   {
-    "revision": "0f94de3967897023dc6c",
-    "url": "/static/css/main.57996518.chunk.css"
+    "revision": "8cad1c51674619ecf97d",
+    "url": "/static/css/main.3e9d7e30.chunk.css"
   },
   {
-    "revision": "1c94bbc889b89ef592ed",
-    "url": "/static/js/2.87612f8a.chunk.js"
+    "revision": "55ff6a4d078aa7162d7e",
+    "url": "/static/js/2.971940ae.chunk.js"
   },
   {
-    "revision": "137742d1824a900b7e1b9020ddee17fb",
-    "url": "/static/js/2.87612f8a.chunk.js.LICENSE.txt"
+    "revision": "b114cc85da504a772f040e3f40f8e46a",
+    "url": "/static/js/2.971940ae.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "0f94de3967897023dc6c",
-    "url": "/static/js/main.18b43506.chunk.js"
+    "revision": "8cad1c51674619ecf97d",
+    "url": "/static/js/main.8010bb5c.chunk.js"
   },
   {
     "revision": "8e03037278040721348c",
     "url": "/static/js/runtime-main.3aade4d2.js"
+  },
+  {
+    "revision": "f91c8809245921ec8f5de86a5f24cd4d",
+    "url": "/static/media/clock-icon.f91c8809.svg"
   },
   {
     "revision": "ce58df747e4f5a5a24de5214274d3c7c",
