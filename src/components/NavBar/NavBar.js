@@ -8,8 +8,11 @@ import whiteLogo from "./assets/white-logo.svg";
 import playIcon from "./assets/play-icon.svg";
 import saveIcon from "./assets/save-icon.svg";
 //import { Link } from 'react-router-dom';
+import { useSnippets } from '../../context/SnippetContext';
 
 const NavBar = () => {
+  const { moveSnippetToFront } = useSnippets();
+
   const placeholder = "Untitled Snippet";
   const [text, setText] = useState(placeholder);
 
@@ -34,11 +37,11 @@ const NavBar = () => {
           <img src={whiteLogo} alt="PyFiddle Logo" draggable="false" />
           <p>PyFiddle</p>
         </div>
-        <div className="nav-button">
+        <div onClick={moveSnippetToFront} className="nav-button">
           <img style={{width: "0.75rem"}} src={playIcon} draggable="false" />
           <p>Run</p>
         </div>
-        <div className="nav-button">
+        <div onClick={moveSnippetToFront} className="nav-button">
           <img src={saveIcon} draggable="false" />
           <p>Save</p>
         </div>

@@ -5,17 +5,19 @@ import NavBar from './components/NavBar/NavBar';
 import SideBar from './components/SideBar/SideBar';
 import CodeEditor from './components/CodeEditor/CodeEditor';
 
+import { SnippetProvider } from './context/SnippetContext';
+
 import './App.css';
 
 const App = () => {
 	return (
-	  <Router>
+	  <SnippetProvider>
 		<NavBar />
 		<div style={{ display: "flex", height: "100%" }}>
 			<SideBar />
 			<CodeEditor />
 		</div>
-	  </Router>
+	  </SnippetProvider>
 	);
 }
 
