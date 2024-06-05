@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
+
 nav {
     width: 100vw;
     height: 3rem;
@@ -9,6 +11,8 @@ nav {
 
 .nav-left {
     flex: 1;
+    display: flex;
+    align-items: center;
 }
 
 .nav-center {
@@ -39,6 +43,7 @@ nav {
     outline: 1px solid #1a1c22;
     transition: outline 0.3s ease, background-color 0.3s ease;
     white-space: nowrap;
+    user-select: none;
 }
 
 .nav-button img {
@@ -57,7 +62,6 @@ nav {
 
 .sign-in {
     color: black;
-    /*padding: 0.375rem 0.75rem;*/
     background-color: #56b6c2;
     font-weight: 500;
 }
@@ -100,4 +104,29 @@ input:focus {
     background-color: #3e4c60;
     cursor: text;
     outline: 1px solid #fff;
+}
+
+a {
+    text-decoration: none; 
+}
+
+.logo {
+    display: flex;
+    height: 100%;
+    margin-left: 0.75rem;
+    font-family: "Oxygen";
+    color: white;
+    font-weight: 700;
+    line-height: 100%;
+    user-select: none;
+    cursor: pointer;
+}
+
+.logo p {
+    margin-left: 0.25rem;
+    margin-right: 1rem;
+}
+
+.logo img {
+    width: 1.25rem;
 }
