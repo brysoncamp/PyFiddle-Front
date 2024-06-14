@@ -1,7 +1,7 @@
 # PyFiddle Front-End
 
 ## Production Version
-- Available at [https://pyfiddle.com](https://pyfiddle.net)
+- Available at [https://pyfiddle.net](https://pyfiddle.net)
 
 ## Running with Docker
 ### Step 1. Install and Run Docker Desktop
