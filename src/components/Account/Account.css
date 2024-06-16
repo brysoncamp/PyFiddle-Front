@@ -1,0 +1,15 @@
+.account-page {
+    padding: 2rem;
+}
+
+.account-title {
+    color: white;
+    font-size: 2rem;
+    line-height: 100%;
+}
+
+.account-content {
+    color: #ccc;
+    margin-top: 1rem;
+    font-size: 1rem;
+}

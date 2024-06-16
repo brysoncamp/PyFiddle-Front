@@ -7,29 +7,21 @@ import forkIcon from "./assets/fork-icon.svg";
 import whiteLogo from "./assets/white-logo.svg";
 import playIcon from "./assets/play-icon.svg";
 import saveIcon from "./assets/save-icon.svg";
+import manageIcon from "./assets/manage-icon.svg";
 import { useLocation, useNavigate,  Link } from 'react-router-dom';
 import { useSnippets } from '../../context/SnippetContext';
 
 const NavBar = ({ session }) => {
-  const { handleSnippetClick, moveSnippetToFront, file, fileName, setFileName,  runCode, setRunCode, setRunSave } = useSnippets();
+  const { handleSnippetClick, moveSnippetToFront, file, fileName, setFileName,  runCode, setRunCode, setRunSave, setEditName } = useSnippets();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const userLoggedIn = session && session.loginSuccess;
-  const isApplicationPage = location.pathname !== "/snippets" && location.pathname !== "/account";
-
-  /*useEffect(() => {
-    console.log("Location changed:", location.pathname);
-  }, [fileName]);*/
+  const isApplicationPage = location.pathname !== "/manage" && location.pathname !== "/account";
 
   const placeholder = "Untitled Snippet";
-  //const [text, setText] = useState(fileName || placeholder); // fileName
-
-  /*useEffect(() => {
-    setText(fileName || placeholder);
-  }, [fileName])*/
 
   const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
   const pyfiddleApiUri = import.meta.env.VITE_PYFIDDLE_API_URI;
@@ -45,9 +37,12 @@ const NavBar = ({ session }) => {
     if (fileName.trim() === "") {
       setFileName("Untitled Snippet");
     }
+    
+    if (userLoggedIn) handleSave();
   };
 
   const handleFocus = (event) => {
+    setEditName(true);
     event.target.select();
   };
 
@@ -69,7 +64,8 @@ const NavBar = ({ session }) => {
     setIsLoading(true);
     setRunCode(true);
     moveSnippetToFront();
-    handleSave();
+
+    if (userLoggedIn) handleSave();
   }
 
   const handleNew = () => {
@@ -82,7 +78,11 @@ const NavBar = ({ session }) => {
 
     if (!file.trim()) return;
 
-    //setRunSave(true);
+    if (!userLoggedIn) {
+      alert("You must be logged in with GitHub to save snippets.")
+      return;
+    }
+
     moveSnippetToFront();
     animateLoad();
 
@@ -106,7 +106,6 @@ const NavBar = ({ session }) => {
       if (response.ok) {
         const result = await response.json();
         console.log(result);
-        // only navigate if the path is different
         if (result.path !== location.pathname.slice(1)) navigate(`/${result.path}`);
       } else {
         console.error(response);
@@ -161,7 +160,7 @@ const NavBar = ({ session }) => {
         )}
       </div>
       <div className="nav-right">
-        {isApplicationPage && (
+        {isApplicationPage && false && (
           <>
             <div className="nav-button">
               <img src={shareIcon} draggable="false" />
@@ -176,6 +175,10 @@ const NavBar = ({ session }) => {
         <div className="nav-button" onClick={handleNew}>
           <img src={plusIcon} draggable="false" />
           <p>New Snippet</p>
+        </div>
+        <div className="nav-button" onClick={() => { navigate("manage")}}>
+          <img style={{height: "1.25rem", marginRight: "0.125rem"}} src={manageIcon} draggable="false" />
+          <p>Manage</p>
         </div>
         {userLoggedIn ? (
           <div>

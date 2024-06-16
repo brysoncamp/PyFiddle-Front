@@ -13,6 +13,8 @@ export const SnippetProvider = ({ children }) => {
     const [runCode, setRunCode] = useState(false);
     const [runComplete, setRunComplete] = useState(false);
 
+    const [editName, setEditName] = useState(false);
+
     const [runSave, setRunSave] = useState(false);
 
     const [libraries, setLibraries] = useState(() => {
@@ -43,7 +45,6 @@ export const SnippetProvider = ({ children }) => {
 
                     setSnippets(processedData);
                     
-                    // Extract the snippet identifier from the URL path
                     const path = location.pathname.slice(1);
                     const foundSnippet = processedData.find(snippet => snippet.path === path);
                     if (foundSnippet) {
@@ -57,6 +58,7 @@ export const SnippetProvider = ({ children }) => {
 
         fetchSnippets();
     }, [location.pathname]);
+
     const [selectedId, setSelectedId] = useState(-1);
     const [file, setFile] = useState("");
     const [fileName, setFileName] = useState(location.pathname === "/" ? "Untitled Snippet" : " ");
@@ -66,15 +68,24 @@ export const SnippetProvider = ({ children }) => {
     };
 
     const moveSnippetToFront = () => {
-        if (selectedId !== null) {
-            setSnippets(prev => {
-                const snippet = prev.find(s => s.id === selectedId);
-                const others = prev.filter(s => s.id !== selectedId);
-                return [snippet, ...others];
-            });
+        try {
+            if (selectedId !== null && Array.isArray(snippets) && snippets.length > 0) {
+                setSnippets(prev => {
+                    const cleanSnippets = prev.filter(s => s !== undefined);
+                    const snippet = cleanSnippets.find(s => s.id === selectedId);
+                    if (!snippet) {
+                        console.error('No snippet found with the given ID:', selectedId);
+                        return prev;
+                    }
+                    const others = cleanSnippets.filter(s => s.id !== selectedId);
+                    return [snippet, ...others];
+                });
+            }
+        } catch (error) {
+            console.error('Failed to move snippet to front:', error);
         }
     };
-
+    
     const getFile = (gistData, fileName) => {
 
         if (!gistData) console.log("NO GIST DATA");
@@ -96,6 +107,8 @@ export const SnippetProvider = ({ children }) => {
             setFile("");
         } else if (path.length === 8) {
             const fetchSnippet = async () => {
+                setFile("");
+                //setFileName(" ");
                 try {
                     const response = await fetch(`${import.meta.env.VITE_PYFIDDLE_API_URI}/snippet/${path}`, {
                         credentials: 'include'
@@ -130,10 +143,6 @@ export const SnippetProvider = ({ children }) => {
     }, [location, navigate]);
 
     useEffect(() => {
-        /*if (runSave) {
-            handleFetchSnippet();
-            setRunSave(false);
-        }*/
         handleFetchSnippet();
         if (runSave) {
             setRunSave(false);
@@ -141,7 +150,7 @@ export const SnippetProvider = ({ children }) => {
     }, [runSave]);
 
     return (
-        <SnippetContext.Provider value={{ snippets, selectedId, handleSnippetClick, moveSnippetToFront, file, fileName, setFile, setFileName, runCode, setRunCode, runComplete, setRunComplete, libraries, setLibraries, setRunSave }}>
+        <SnippetContext.Provider value={{ snippets, selectedId, handleSnippetClick, moveSnippetToFront, file, fileName, setFile, setFileName, runCode, setRunCode, runComplete, setRunComplete, libraries, setLibraries, setRunSave, editName, setEditName }}>
             {children}
         </SnippetContext.Provider>
     );

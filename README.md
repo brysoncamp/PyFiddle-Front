@@ -30,3 +30,14 @@ docker run -p 3000:3000 pyfiddle-frontend
 
 ### Step 6. Follow Back-End Instructions
 - Available at
+
+## Deploying to Pages
+### Step 1. Build Project
+```powershell
+npm run build
+```
+
+### Step 2. Deploy Project
+```powershell
+npm run deploy
+```

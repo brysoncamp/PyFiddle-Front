@@ -13,7 +13,6 @@
     "@uiw/react-codemirror": "^4.22.1",
     "codemirror": "^5.65.16",
     "gh-pages": "^6.1.1",
-    "pyodide": "^0.26.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1"
@@ -36,7 +35,6 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^18.3.3",
     "@vitejs/plugin-react": "^4.3.1",
     "vite": "^5.3.0"
   }

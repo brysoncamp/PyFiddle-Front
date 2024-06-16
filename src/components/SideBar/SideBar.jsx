@@ -7,6 +7,7 @@ import './SideBar.css';
 
 import { useSnippets } from '../../context/SnippetContext.jsx';
 
+
 const availableLibraries = [
     { id: 1, name: "numpy", isChecked: false },
     { id: 2, name: "pandas", isChecked: false },
@@ -16,7 +17,7 @@ const availableLibraries = [
 ];
 
 const SideBar = () => {
-    const { snippets, selectedId, handleSnippetClick, libraries, setLibraries, fileName, setFileName } = useSnippets();
+    const { snippets, selectedId, handleSnippetClick, libraries, setLibraries, fileName, setFileName, editName, setEditName } = useSnippets();
 
     const navigate = useNavigate();
 
@@ -67,8 +68,8 @@ const SideBar = () => {
                     snippet && (
                         <div key={snippet.id}
                             className={`recent-snippet ${snippet.id === selectedId ? 'recent-snippet-selected' : ''}`}
-                            onClick={() => { setFileName(snippet.title); handleSnippetClick(snippet.id); navigate(snippet.path) }}>
-                            <p>{snippet.id === selectedId ? fileName : snippet.title}</p>
+                            onClick={() => { setEditName(false), setFileName(snippet.title); handleSnippetClick(snippet.id); navigate(snippet.path) }}>
+                            <p>{snippet.id === selectedId && editName ? fileName : snippet.title}</p>
                         </div>
                     )
                 ))}

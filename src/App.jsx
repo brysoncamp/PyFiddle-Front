@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar/NavBar.jsx';
 import SideBar from './components/SideBar/SideBar.jsx';
-import CodeEditor from './components/CodeEditor/CodeEditor.jsx';
 import Account from './components/Account/Account';
+import Manage from './components/Manage/Manage';
 
 import CodeWorkspace from './components/CodeWorkspace/CodeWorkspace.jsx';
 
@@ -14,7 +14,6 @@ import './App.css';
 const App = () => {
 
 	const [session, setSession] = useState(null);
-	const [snippetContent, setSnippetContent] = useState(null);
 	const sessionUri = `${import.meta.env.VITE_PYFIDDLE_API_URI}/session`;
 
 	useEffect(() => {
@@ -43,7 +42,8 @@ const App = () => {
 					<SideBar />
 					<Routes>
 						<Route path="/" element={<CodeWorkspace />} />
-						<Route path="/account" element={<Account />} />
+						<Route path="/account" element={<Account session={session} />} />
+						<Route path="/manage" element={<Manage session={session} />} />
 						<Route path="*" element={<CodeWorkspace />} />
 					</Routes>
 				</div>
