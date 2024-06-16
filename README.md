@@ -29,7 +29,7 @@ docker run -p 3000:3000 pyfiddle-frontend
 - Available at [http://localhost:3000](http://localhost:3000)
 
 ### Step 6. Follow Back-End Instructions
-- Available at
+- Available at [https://github.com/bryson15/](https://github.com/bryson15/PyFiddle-Back)
 
 ## Deploying to Pages
 ### Step 1. Build Project
