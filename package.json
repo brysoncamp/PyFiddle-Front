@@ -3,39 +3,25 @@
   "homepage": "https://pyfiddle.net",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
-    "@codemirror/basic-setup": "^0.20.0",
+    "@codemirror/autocomplete": "^6.16.2",
     "@codemirror/lang-python": "^6.1.6",
-    "@codemirror/language": "^6.10.2",
     "@codemirror/state": "^6.4.1",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.27.0",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@uiw/codemirror-theme-github": "^4.22.1",
-    "@uiw/codemirror-theme-monokai": "^4.22.1",
     "@uiw/react-codemirror": "^4.22.1",
     "codemirror": "^5.65.16",
     "gh-pages": "^6.1.1",
+    "pyodide": "^0.26.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1",
-    "react-scripts": "^3.0.1",
-    "web-vitals": "^2.1.4"
+    "react-router-dom": "^6.23.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "vite --mode development",
+    "build": "vite build --mode production",
     "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -50,6 +36,8 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^3.3.0"
+    "@types/react": "^18.3.3",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.3.0"
   }
 }

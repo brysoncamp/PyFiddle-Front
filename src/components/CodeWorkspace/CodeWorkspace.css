@@ -1,0 +1,10 @@
+.divider {
+    border-top: 2px solid #2a313d;
+    background-color: #1a1c22;
+    min-height: 4px;
+    cursor: ns-resize;
+}
+
+.dividing {
+    border-top: 2px solid #56b6c2;
+}
