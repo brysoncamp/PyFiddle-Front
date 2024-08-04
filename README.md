@@ -11,7 +11,7 @@
 
 ### Step 2. Clone the Repository
 ```powershell
-git clone https://github.com/bryson15/PyFiddle-Front.git
+git clone https://github.com/bryson15/PyFiddle-Front.git pyfiddle-frontend
 cd pyfiddle-frontend
 ```
 

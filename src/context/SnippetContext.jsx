@@ -108,7 +108,6 @@ export const SnippetProvider = ({ children }) => {
         } else if (path.length === 8) {
             const fetchSnippet = async () => {
                 setFile("");
-                //setFileName(" ");
                 try {
                     const response = await fetch(`${import.meta.env.VITE_PYFIDDLE_API_URI}/snippet/${path}`, {
                         credentials: 'include'

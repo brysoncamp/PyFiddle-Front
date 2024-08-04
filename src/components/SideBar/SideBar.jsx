@@ -7,7 +7,6 @@ import './SideBar.css';
 
 import { useSnippets } from '../../context/SnippetContext.jsx';
 
-
 const availableLibraries = [
     { id: 1, name: "numpy", isChecked: false },
     { id: 2, name: "pandas", isChecked: false },
