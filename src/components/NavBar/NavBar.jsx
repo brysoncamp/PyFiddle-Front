@@ -12,7 +12,7 @@ import { useLocation, useNavigate,  Link } from 'react-router-dom';
 import { useSnippets } from '../../context/SnippetContext';
 
 const NavBar = ({ session }) => {
-  const { handleSnippetClick, moveSnippetToFront, file, fileName, setFileName,  runCode, setRunCode, setRunSave, setEditName } = useSnippets();
+  const { handleSnippetClick, moveSnippetToFront, file, fileName, setFileName, setFile, runCode, setRunCode, setRunSave, setEditName } = useSnippets();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -59,6 +59,8 @@ const NavBar = ({ session }) => {
 
   const handleRun = () => {
 
+    console.log("RUNNING CODE", file, runCode);
+
     if (!file.trim() || runCode) return;
 
     setIsLoading(true);
@@ -71,7 +73,9 @@ const NavBar = ({ session }) => {
   const handleNew = () => {
     setFileName("Untitled Snippet");
     handleSnippetClick(-1);
+    setFile("");
     navigate("/");
+    //setRunCode("");
   }
 
   const handleSave = async () => {
