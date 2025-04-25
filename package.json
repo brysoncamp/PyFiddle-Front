@@ -15,11 +15,14 @@
     "gh-pages": "^6.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "vike": "^0.4.228"
   },
   "scripts": {
-    "dev": "vite --mode development",
-    "build": "vite build --mode production",
+    "vike": "vike dev --mode development",
+    "dev": "vike dev  --mode development",
+    "build": "vike build --mode production",
+    "preview": "vike preview",
     "deploy": "gh-pages -d build"
   },
   "browserslist": {
@@ -36,6 +39,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.2.10"
+    "vite": "^5.0.0"
   }
 }

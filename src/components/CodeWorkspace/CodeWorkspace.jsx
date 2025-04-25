@@ -5,13 +5,19 @@ import Output from '../Output/Output.jsx';
 import "./CodeWorkspace.css";
 
 const CodeWorkspace = () => {
+
+
+    const [editorHeight, setEditorHeight] = useState(300);
+    const currentHeightRef = useRef(300);
+    const previousWindowHeightRef = useRef(typeof window !== 'undefined' ? window.innerHeight : 1080);
+    /*
     const [editorHeight, setEditorHeight] = useState(() => {
         const savedHeight = localStorage.getItem('editorHeight');
         return savedHeight ? parseInt(savedHeight, 10) : 300;
     });
-
-    const currentHeightRef = useRef(editorHeight);
-    const previousWindowHeightRef = useRef(window.innerHeight);
+    */
+    //const currentHeightRef = useRef(editorHeight);
+    //const previousWindowHeightRef = useRef(window.innerHeight);
     const startYRef = useRef(0);
     const isResizingRef = useRef(false);
     const dividerRef = useRef(null);
@@ -74,9 +80,9 @@ const CodeWorkspace = () => {
         previousWindowHeightRef.current = totalHeight;
     }, []);
 
-    useEffect(() => {
-        localStorage.setItem('editorHeight', editorHeight);
-    }, [editorHeight]);
+    // useEffect(() => {
+    //     localStorage.setItem('editorHeight', editorHeight);
+    // }, [editorHeight]);
 
     useEffect(() => {
         window.addEventListener('resize', handleWindowResize);

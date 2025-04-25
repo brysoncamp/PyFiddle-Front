@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { navigate } from 'vike/client/router'
 
 import clockIcon from "./assets/clock-icon.svg";
 import libraryIcon from "./assets/library-icon.svg";
@@ -18,7 +19,7 @@ const availableLibraries = [
 const SideBar = () => {
     const { snippets, selectedId, handleSnippetClick, libraries, setLibraries, fileName, setFileName, editName, setEditName } = useSnippets();
 
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     const [librarySelections, setLibrarySelections] = useState([]);
     

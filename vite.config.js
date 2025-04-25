@@ -1,13 +1,12 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react'
+import vike from 'vike/plugin'
 
-export default defineConfig({
-    plugins: [react()],
-    build: {
-        outDir: 'build',
-    },
-    server: {
-        host: 'localhost',
-        port: 3000
-    }
-});
+export default {
+  plugins: [
+    react(),
+    vike()
+  ],
+  base: '/',
+  build: { outDir: 'build' },
+  server: { port: 3000 }
+}

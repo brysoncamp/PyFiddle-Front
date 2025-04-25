@@ -17,45 +17,86 @@ const Output = () => {
   const hasMounted = useRef(false); 
 
 
+  const pendingLibrariesRef = useRef(null);
+  const lastInitializedLibrariesRef = useRef(null);
+
+
+
+
   useEffect(() => {
-    workerRef.current = new Worker('/pyodideWorker.js');
+    //workerRef.current = new Worker('/pyodideWorker.js');
+    workerRef.current = new Worker(new URL('../../workers/pyodideWorker.js', import.meta.url), { type: 'module' })
 
     workerRef.current.onmessage = (event) => {
       const { type, message, error } = event.data;
-      if (type === 'log') {
-        setOutput(prevOutput => [...prevOutput.slice(0, -1), message, ""]);
-      } else if (type === 'package-log') {
-        setOutput(prevOutput => [...prevOutput.slice(0, -1), <span style={{ color: '#56b6c2' }}>{message}</span>,  ...(message.includes('Loaded ') ? ["", ""] : [""])]);
-      } else if (type === 'error') {
-        console.log("error message", error);
-        const cleanedError = "Error: " + error.toString().split(`<exec>", `)[1];
-        console.log("ERROR", cleanedError);
-
-        setOutput(prevOutput => error
-          ? [
-              ...prevOutput.slice(0, -1),
-              ...cleanedError.split('\n').map((line, i) => (
-                <span key={i} style={{ color: '#e06c75', whiteSpace: 'pre-wrap' }}>
-                  {line}
-                  <br />
-                </span>
-              ))
-              ,
-              ">", ""
-            ]
-          : [...prevOutput, ">", ""]
-        );
+    
+      const flushPendingInit = () => {
+        const nextLibs = pendingLibrariesRef.current;
+        if (!nextLibs) return false;
+    
+        pendingLibrariesRef.current = null;
+        console.log("LOADING HERE 2");
+        setTimeout(() => setOutput(prev => [...prev.slice(0, -2), "> Loading...", "", "", ""]), 0);
         
-        setRunCode(false);
-      } else if (type === 'success') {
-        setOutput(prevOutput => [...prevOutput, ">", ""]);
-        setRunCode(false);
-      } else if (type === 'ready') {
-        setOutput(prevOutput => [...prevOutput.slice(0, -1), ">", ""]);
-        setWorkerReady(true);
-        initLoadingRef.current = false;
+        setWorkerReady(false);
+        initLoadingRef.current = true;
+        workerRef.current.postMessage({ type: 'init', packages: nextLibs });
+        console.log('[Output] Flushed pending init', nextLibs);
+        return true;
+      };
+    
+      switch (type) {
+        case 'log':
+          setOutput(prev => [...prev.slice(0, -1), message, ""]);
+          break;
+    
+        case 'package-log':
+          setOutput(prev => [
+            ...prev.slice(0, -2),
+            <span style={{ color: '#56b6c2' }}>{message}</span>,
+            ...(message.includes('Loaded ') ? ["", "", ""] : [""])
+          ]);
+          break;
+    
+        case 'error':
+          console.log("error message", error);
+          if (!error?.includes("<exec>")) return;
+          const cleanedError = "Error: " + error.toString().split(`<exec>", `)[1];
+          setOutput(prev => [
+            ...prev.slice(0, -1),
+            ...cleanedError.split('\n').map((line, i) => (
+              <span key={i} style={{ color: '#e06c75', whiteSpace: 'pre-wrap' }}>
+                {line}
+                <br />
+              </span>
+            )),
+            ">", ""
+          ]);
+          setRunCode(false);
+          flushPendingInit() || setWorkerReady(true);
+          break;
+    
+        case 'success':
+          setOutput(prev => [...prev, ">", ""]);
+          setRunCode(false);
+          flushPendingInit() || setWorkerReady(true);
+          break;
+    
+        case 'ready':
+          console.log('[Output] Worker ready');
+          initLoadingRef.current = false;
+          flushPendingInit() || (() => {
+            setOutput(prev => {
+              const lastNonEmpty = prev.findLastIndex(item => item !== "");
+              return [...prev.slice(0, lastNonEmpty + 1), "", ">", ""];
+            });
+            
+            setWorkerReady(true)
+          })();
+          break;
       }
     };
+    
 
     return () => {
       workerRef.current.terminate();
@@ -64,36 +105,62 @@ const Output = () => {
 
   
 
+  // useEffect(() => {
+  //   if (!workerRef.current) return;
+
+  //   console.log("running libraries loading effect", libraries);
+
+  //   // if (!hasMounted.current) {
+  //   //   hasMounted.current = true;
+  //   //   return;
+  //   // }
+
+  //   if (!initLoadingRef.current && libraries) {
+  //     if (libraries.length > 0) {
+  //       setOutput(prev => [...prev.slice(0, -2), "> Loading...", "", ""]);
+  //     } else {
+  //       setOutput(prev => [...prev.slice(0, -2), "> Loading...", "", ""]);
+  //     }
+
+  //     console.log("sending init message", libraries);
+  //     setWorkerReady(false);
+  //     initLoadingRef.current = true;
+  //     workerRef.current.postMessage({ type: 'init', packages: libraries });
+  //   }
+  // }, [libraries]);
+
+  // 👇 On libraries change
   useEffect(() => {
-    if (!workerRef.current) return;
+    if (!workerRef.current || !libraries) return;
 
-    if (!hasMounted.current) {
-      hasMounted.current = true;
-      return;
-    }
-
-    if (!initLoadingRef.current && libraries) {
-      if (libraries.length > 0) {
-        setOutput(prev => [...prev.slice(0, -2), "> Loading...", "", ""]);
-      } else {
-        setOutput(prev => [...prev.slice(0, -2), "> Loading...", "", ""]);
-      }
-
-      console.log("sending init message", libraries);
+    if (workerReady) {
+      console.log('[Output] Worker is ready, sending init now', libraries);
       setWorkerReady(false);
       initLoadingRef.current = true;
       workerRef.current.postMessage({ type: 'init', packages: libraries });
+      setTimeout(() => setOutput(prev => [...prev.slice(0, -3), "", "> Loading...", "", "", ""]), 0);
+      console.log("LOADING HERE 1");
+    } else {
+      console.log('[Output] Worker not ready, deferring init', libraries);
+      pendingLibrariesRef.current = libraries;
     }
   }, [libraries]);
+
+  
+  
   
 
   useEffect(() => {
     if (runCode && file && workerRef.current && workerReady) {
-      console.log(libraries);
+      console.log('[Output] Sending runPython', libraries);
+      setWorkerReady(false); // ⛔ Not ready during execution
       setOutput(prevOutput => [...prevOutput.slice(0, -2), '> Running...', '', '']);
       workerRef.current.postMessage({ type: 'runPython', code: file, packages: libraries });
     }
   }, [file, runCode, libraries, workerReady]);
+  
+
+
 
   useEffect(() => {
     if (outputRef.current) {

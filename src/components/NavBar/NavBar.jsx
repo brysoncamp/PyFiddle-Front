@@ -8,13 +8,29 @@ import whiteLogo from "./assets/white-logo.svg";
 import playIcon from "./assets/play-icon.svg";
 import saveIcon from "./assets/save-icon.svg";
 import manageIcon from "./assets/manage-icon.svg";
-import { useLocation, useNavigate,  Link } from 'react-router-dom';
+
+//import { useLocation, useNavigate,  Link } from 'react-router-dom';
+//import { usePageContext } from '/renderer/usePageContext'; // ✅
+import { usePageContext } from '../../../renderer/usePageContext.jsx'; // ✅ relative path
+
+
+import { navigate } from 'vike/client/router'
+
 import { useSnippets } from '../../context/SnippetContext';
 
 const NavBar = ({ session }) => {
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+
+
   const { handleSnippetClick, moveSnippetToFront, file, fileName, setFileName, setFile, runCode, setRunCode, setRunSave, setEditName } = useSnippets();
-  const location = useLocation();
-  const navigate = useNavigate();
+  //const location = useLocation();
+  const { urlPathname, routeParams } = usePageContext();
+  const location = urlPathname;
+
+  //const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,7 +42,8 @@ const NavBar = ({ session }) => {
   const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
   const pyfiddleApiUri = import.meta.env.VITE_PYFIDDLE_API_URI;
   const redirectUri = `${pyfiddleApiUri}/auth`;
-  const currentUrl = window.location.href;
+  //const currentUrl = window.location.href;
+  const currentUrl = urlPathname;
   const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&scope=gist&redirect_uri=${redirectUri}&state=${encodeURIComponent(currentUrl)}`;
 
   const handleChange = (event) => {
@@ -158,7 +175,7 @@ const NavBar = ({ session }) => {
       </div>
       <div className="nav-center">  
         {isApplicationPage ? (
-          <input className="input" value={fileName} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} size={fileName.length + 1} placeholder={placeholder} />
+          <input className="input" value={fileName} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} size={mounted ? fileName.length + 1 : 1} placeholder={placeholder} />
         ) : (
           <input value={location.pathname === "/account" ? "Account Settings" : "Manage Snippets"} tabIndex={-1} onMouseDown={(e) => e.preventDefault()} onFocus={(e) => e.target.blur()} />
         )}
@@ -186,10 +203,21 @@ const NavBar = ({ session }) => {
         </div>
         {userLoggedIn ? (
           <div>
-            <Link to="/account" className="sign-in nav-button">
+            {/* <Link to="/account" className="sign-in nav-button">
               <img src={githubLogo} draggable="false" alt="GitHub Logo" />
               <p>{session.username}</p>
-            </Link>
+            </Link> */}
+            <a
+              href="/account"
+              className="sign-in nav-button"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/account');
+              }}
+            >
+              <img src={githubLogo} draggable="false" alt="GitHub Logo" />
+              <p>{session.username}</p>
+            </a>
           </div>
         ) : (
           <a href={githubAuthUrl} className="sign-in nav-button">

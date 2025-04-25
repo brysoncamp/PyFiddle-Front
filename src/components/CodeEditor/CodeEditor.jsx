@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python'; 
 import { oneDark } from '@codemirror/theme-one-dark';
@@ -6,10 +6,16 @@ import { autocompletion } from '@codemirror/autocomplete';
 import { useSnippets } from '../../context/SnippetContext';
 
 const CodeEditor = ({ height }) => {
+  if (typeof window === 'undefined') {
+    return (
+      <div className="cm-theme" style={{ width: '100%' }} />
+    );
+  }
+  
 
   const { file, setFile } = useSnippets();
-  const [code, setCode] = React.useState('');
-  
+  const [code, setCode] = useState('');
+
   useEffect(() => {
     setCode(file);
   }, [file]);
@@ -17,17 +23,18 @@ const CodeEditor = ({ height }) => {
   return (
     <CodeMirror
       value={code}
-      style={{width: "100%"}}
+      style={{ width: '100%' }}
       height={`${height}px`}
-      extensions={[python(), autocompletion({ activateOnTyping: false })]} 
+      extensions={[python(), autocompletion({ activateOnTyping: false })]}
       theme={oneDark}
-      onChange={(value, viewUpdate) => {
+      onChange={(value) => {
         setCode(value);
         setFile(value);
-        console.log(value);
       }}
     />
   );
-}
+};
+
+
 
 export default CodeEditor;
